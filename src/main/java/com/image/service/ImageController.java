@@ -51,22 +51,23 @@ public class ImageController {
                 logger.info("Optimized image exists");
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 ImageIO.write(resizedBufferedImage, "jpg", os);
-                resizedImage = os.toByteArray();
 
-            } else {
-                logger.info("Optimized image does not exists");
-                try {
-                    URL sourceImageUrl = new URL(SOURCE_IMG_DIR + fileName);
-                    sourceImage = ImageIO.read(sourceImageUrl);
-                } catch (IOException e) {
-                    logger.warning("The original image does not exist: " + e);
-                }
-
-                ImageResizer imageResizer = new ImageResizer();
-                resizedImage = imageResizer.resizeImage(sourceImage, typeName);
+                return resizedImage = os.toByteArray();
             }
         } catch (IOException e) {
             logger.warning("The URL is not valid: " + e);
+        }
+
+        try {
+            URL sourceImageUrl = new URL(SOURCE_IMG_DIR + fileName);
+            sourceImage = ImageIO.read(sourceImageUrl);
+            logger.info("Optimized image does not exists");
+            ImageResizer imageResizer = new ImageResizer();
+
+            return resizedImage = imageResizer.resizeImage(sourceImage, typeName);
+
+        } catch (IOException e) {
+            logger.warning("The original image does not exist: " + e);
         }
 
         return resizedImage;
