@@ -1,5 +1,7 @@
 package com.image.service;
 
+import java.security.InvalidParameterException;
+
 public class ImageSettingsBuilder {
 
     private final static String IMG_TYPE_THUMBNAIL = "thumbnail";
@@ -12,12 +14,14 @@ public class ImageSettingsBuilder {
             return new ImageSettings(200, 200, 90);
         }
 
-        if(typeName.equals(IMG_TYPE_DETAIL)) {
+        else if(typeName.equals(IMG_TYPE_DETAIL)) {
 
             return new ImageSettings(400, 400, 90);
         }
 
-        return new ImageSettings();
+        else {
+            throw new InvalidParameterException("The requested image type is not available. Valid types: thumbnail, detail ");
+        }
     }
 
     public void scaleImage(ImageSettings.ScaleType scaleType) {
