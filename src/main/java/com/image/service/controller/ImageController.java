@@ -1,5 +1,7 @@
-package com.image.service;
+package com.image.service.controller;
 
+import com.image.service.ImageResizer;
+import com.image.service.ImageSettingsBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,4 +74,5 @@ public class ImageController {
 
         return resizedImage;
     }
+    
 }
