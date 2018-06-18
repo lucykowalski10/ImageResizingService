@@ -16,8 +16,6 @@ import java.util.logging.Logger;
 public class ImageController {
 
     private final static Logger logger = Logger.getLogger("log");
-    private byte[] resizedImage = null;
-    private BufferedImage sourceImage;
     private final static String SOURCE_IMG_DIR = "https://s3.eu-west-2.amazonaws.com/bucket-10/resources/sourceImages/";
     private final static String RESIZED_IMG_DIR = "https://s3.eu-west-2.amazonaws.com/bucket-10/resources/resizedImages/";
 
@@ -31,7 +29,7 @@ public class ImageController {
 
         ImageSettingsBuilder imageSettingsBuilder = new ImageSettingsBuilder();
         imageSettingsBuilder.buildImageSettings(typeName);
-        resizedImage = this.getResizedImageFile(fileName, typeName);
+        byte[] resizedImage = this.getResizedImageFile(fileName, typeName);
 
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resizedImage);
     }
@@ -54,7 +52,7 @@ public class ImageController {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 ImageIO.write(resizedBufferedImage, "jpg", os);
 
-                return resizedImage = os.toByteArray();
+                return os.toByteArray();
             }
         } catch (IOException e) {
             logger.warning("The URL is not valid: " + e);
@@ -62,17 +60,17 @@ public class ImageController {
 
         try {
             URL sourceImageUrl = new URL(SOURCE_IMG_DIR + fileName);
-            sourceImage = ImageIO.read(sourceImageUrl);
+            BufferedImage sourceImage = ImageIO.read(sourceImageUrl);
             logger.info("Optimized image does not exists");
             ImageResizer imageResizer = new ImageResizer();
 
-            return resizedImage = imageResizer.resizeImage(sourceImage, typeName);
+            return imageResizer.resizeImage(sourceImage, typeName);
 
         } catch (IOException e) {
             logger.warning("The original image does not exist: " + e);
         }
 
-        return resizedImage;
+        return null;
     }
     
 }
